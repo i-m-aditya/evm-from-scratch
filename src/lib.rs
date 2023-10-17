@@ -54,8 +54,14 @@ pub fn evm(_code: impl AsRef<[u8]>) -> EvmResult {
             stack.remove(stack_len - 1);
             stack_len -= 1;
             pc += 1;
-        } else {
-            panic!("Other opcodes not added")
+        } else if code[pc] == 1 {
+            let n1 = stack.pop().unwrap();
+            let n2 = stack.pop().unwrap();
+
+            let (sum, _) = n1.overflowing_add(n2);
+
+            stack.push(sum);
+            pc += 1;
         }
     }
     // TODO: Implement me
