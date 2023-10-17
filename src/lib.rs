@@ -75,6 +75,18 @@ pub fn evm(_code: impl AsRef<[u8]>) -> EvmResult {
             println!("Div: {:?}, {:?}, {:?}", n1, n2, result);
 
             pc += 1;
+        } else if code[pc] == 6 {
+            let n1 = stack.pop().unwrap();
+            let n2 = stack.pop().unwrap();
+
+            if n2 == U256::zero() {
+                stack.push(U256::from(0));
+            } else {
+                let result = n1 % n2;
+                stack.push(result);
+            }
+
+            pc += 1;
         } else {
             panic!("Unknown opcode: {:?}", code[pc]);
         }
