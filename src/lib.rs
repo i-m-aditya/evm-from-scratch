@@ -42,6 +42,16 @@ pub fn evm(_code: impl AsRef<[u8]>) -> EvmResult {
 
             stack.push(sum);
             pc += 1;
+        } else if code[pc] == 2 {
+            let n1 = stack.pop().unwrap();
+            let n2 = stack.pop().unwrap();
+
+            let (result, _) = n1.overflowing_mul(n2);
+
+            stack.push(result);
+            pc += 1;
+        } else {
+            panic!("Unknown opcode: {:?}", code[pc]);
         }
     }
     // TODO: Implement me
