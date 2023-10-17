@@ -38,9 +38,9 @@ pub fn evm(_code: impl AsRef<[u8]>) -> EvmResult {
             let n1 = stack.pop().unwrap();
             let n2 = stack.pop().unwrap();
 
-            let (sum, _) = n1.overflowing_add(n2);
+            let (result, _) = n1.overflowing_add(n2);
 
-            stack.push(sum);
+            stack.push(result);
             pc += 1;
         } else if code[pc] == 2 {
             let n1 = stack.pop().unwrap();
