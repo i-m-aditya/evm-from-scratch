@@ -1,3 +1,5 @@
+use std::result;
+
 use primitive_types::U256;
 mod parse;
 
@@ -56,7 +58,22 @@ pub fn evm(_code: impl AsRef<[u8]>) -> EvmResult {
 
             let (result, _) = n1.overflowing_sub(n2);
 
+            println!("Sub: {:?}, {:?}, {:?}", n1, n2, result);
             stack.push(result);
+            pc += 1;
+        } else if code[pc] == 4 {
+            let n1 = stack.pop().unwrap();
+            let n2 = stack.pop().unwrap();
+
+            let result = n1.checked_div(n2);
+            if result == None {
+                stack.push(U256::from(0));
+            } else {
+                stack.push(result.unwrap());
+            }
+
+            println!("Div: {:?}, {:?}, {:?}", n1, n2, result);
+
             pc += 1;
         } else {
             panic!("Unknown opcode: {:?}", code[pc]);
