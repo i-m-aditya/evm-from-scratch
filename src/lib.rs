@@ -1,4 +1,4 @@
-use std::result;
+use std::{ops::Mul, result};
 
 use primitive_types::U256;
 mod parse;
@@ -100,6 +100,26 @@ pub fn evm(_code: impl AsRef<[u8]>) -> EvmResult {
                 stack.push(result);
             }
 
+            pc += 1;
+        } else if code[pc] == 9 {
+            let n1 = stack.pop().unwrap();
+            let n2 = stack.pop().unwrap();
+            let n3 = stack.pop().unwrap();
+
+            if n3 == U256::zero() {
+                stack.push(U256::from(0));
+            } else {
+                let result = ((n1 % n3).mul(n2 % n3)) % n3;
+                stack.push(result);
+            }
+            pc += 1;
+        } else if code[pc] == 10 {
+            let n1 = stack.pop().unwrap();
+            let n2 = stack.pop().unwrap();
+
+            println!("Exp: {:?}, {:?}", n1, n2);
+            let (val, _) = n1.overflowing_pow(n2);
+            stack.push(val);
             pc += 1;
         } else {
             panic!("Unknown opcode: {:?}", code[pc]);
