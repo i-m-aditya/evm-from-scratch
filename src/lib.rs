@@ -14,26 +14,6 @@ pub fn evm(_code: impl AsRef<[u8]>) -> EvmResult {
 
     println!("Code: {:?}", code);
 
-    // let opcode = code[0];
-
-    // if opcode == 0 {
-    // } else if opcode >= 95 && opcode <= 127 {
-    //     if code.len() == 1 {
-    //         stack.push(U256::from(0));
-    //     } else {
-    //         let mut pc = 0;
-    //         while pc < code.len() {
-    //             let num_byte_to_push = code[pc] - 95;
-    //             stack.push(U256::from(
-    //                 &code[pc + 1..(pc + 1 + num_byte_to_push as usize)],
-    //             ));
-    //             pc = pc + 1 + num_byte_to_push as usize;
-    //         }
-    //     }
-    // } else {
-    //     panic!("Not handled")
-    // }
-
     let mut stack_len = 0;
     while pc < code.len() {
         if code[pc] == 0 {
