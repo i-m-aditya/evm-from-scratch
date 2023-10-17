@@ -87,6 +87,20 @@ pub fn evm(_code: impl AsRef<[u8]>) -> EvmResult {
             }
 
             pc += 1;
+        } else if code[pc] == 8 {
+            let n1 = stack.pop().unwrap();
+            let n2 = stack.pop().unwrap();
+            let n3 = stack.pop().unwrap();
+
+            let (sum, _) = n1.overflowing_add(n2);
+            if n3 == U256::zero() {
+                stack.push(U256::from(0));
+            } else {
+                let result = sum % n3;
+                stack.push(result);
+            }
+
+            pc += 1;
         } else {
             panic!("Unknown opcode: {:?}", code[pc]);
         }
