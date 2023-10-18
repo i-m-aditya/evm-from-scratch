@@ -1,6 +1,6 @@
-use std::{ops::Mul, result};
-
+#[allow(unused_assignments)]
 use primitive_types::U256;
+use std::ops::Mul;
 mod parse;
 
 pub struct EvmResult {
@@ -121,6 +121,51 @@ pub fn evm(_code: impl AsRef<[u8]>) -> EvmResult {
             let (val, _) = n1.overflowing_pow(n2);
             stack.push(val);
             pc += 1;
+        } else if code[pc] == 11 {
+            let _ = stack.pop().unwrap();
+            let n2 = stack.pop().unwrap();
+
+            let format_n = format!("{:x}", n2);
+
+            // check if format_n first char is f or not
+            let first_char = format_n.chars().next().unwrap();
+
+            if first_char == 'f' {
+                println!("Number negative");
+
+                let result = U256::MAX | n2;
+                stack.push(result);
+                pc += 1;
+            } else {
+                println!("Number positive");
+
+                stack.push(n2);
+                pc += 1;
+            }
+
+            // // let N = U256::from(0x7f);
+            // println!("n2: {:?}", n2);
+            // let max_val = U256::MAX;
+
+            // let mut test_num = 1;
+            // println!("hex: {:x?}", n2.as_u128());
+
+            // while test_num < n2.as_u128() {
+            //     println!("hex: {:x?}", test_num);
+            //     test_num *= 16;
+            // }
+            // test_num /= 16;
+            // println!("hex: {:x?}", test_num);
+
+            // if test_num <= n2.as_u128() {
+            //     println!("Number negative");
+            //     test_num *= 16;
+
+            //     let result = max_val | n2;
+            //     println!("Result : {:?}", result);
+            // } else {
+            //     println!("Number positive");
+            // }
         } else {
             panic!("Unknown opcode: {:?}", code[pc]);
         }
