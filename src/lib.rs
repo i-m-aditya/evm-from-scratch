@@ -1,7 +1,7 @@
 #[allow(unused_assignments)]
 use primitive_types::U256;
 use std::ops::Mul;
-mod parse;
+pub mod evm;
 
 pub struct EvmResult {
     pub stack: Vec<U256>,
@@ -142,30 +142,6 @@ pub fn evm(_code: impl AsRef<[u8]>) -> EvmResult {
                 stack.push(n2);
                 pc += 1;
             }
-
-            // // let N = U256::from(0x7f);
-            // println!("n2: {:?}", n2);
-            // let max_val = U256::MAX;
-
-            // let mut test_num = 1;
-            // println!("hex: {:x?}", n2.as_u128());
-
-            // while test_num < n2.as_u128() {
-            //     println!("hex: {:x?}", test_num);
-            //     test_num *= 16;
-            // }
-            // test_num /= 16;
-            // println!("hex: {:x?}", test_num);
-
-            // if test_num <= n2.as_u128() {
-            //     println!("Number negative");
-            //     test_num *= 16;
-
-            //     let result = max_val | n2;
-            //     println!("Result : {:?}", result);
-            // } else {
-            //     println!("Number positive");
-            // }
         } else {
             panic!("Unknown opcode: {:?}", code[pc]);
         }
