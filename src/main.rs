@@ -1,3 +1,4 @@
+use ::evm::evm::{execute, utils::context::ExecutionContext};
 /**
  * EVM From Scratch
  * Rust template
@@ -52,7 +53,12 @@ fn main() {
 
         let code: Vec<u8> = hex::decode(&test.code.bin).unwrap();
 
-        let result = evm(&code);
+        let mut execution_context = ExecutionContext {
+            stack: vec![],
+            pc: 0,
+            input: code,
+        };
+        let result = execute::execute(&mut execution_context).unwrap();
 
         let mut expected_stack: Vec<U256> = Vec::new();
         if let Some(ref stacks) = test.expect.stack {
