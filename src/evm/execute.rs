@@ -18,6 +18,8 @@ pub fn execute(ctx: &mut ExecutionContext) -> Result<EvmResult, Error> {
         }
     }
 
+    ctx.stack.reverse();
+
     Ok(EvmResult {
         stack: ctx.stack.clone(),
         success: true,
