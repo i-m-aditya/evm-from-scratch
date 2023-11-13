@@ -1,23 +1,38 @@
 use std::collections::HashMap;
 
+use primitive_types::U256;
+
 use crate::evm::{opcodes, utils::context::ExecutionContext};
 
 pub type OpcodeResult = Result<Option<Vec<u8>>, anyhow::Error>;
 pub type Opcode = Box<dyn Fn(&mut ExecutionContext) -> OpcodeResult>;
 pub type Opcodes = HashMap<u8, Opcode>;
+
+pub fn pop_n(ctx: &mut ExecutionContext, n: usize) -> Vec<U256> {
+    let mut popped_items: Vec<U256> = vec![];
+
+    (0..n).for_each(|_| {
+        if let Some(item) = ctx.stack.pop() {
+            popped_items.push(item);
+        }
+    });
+
+    popped_items
+}
+
 pub fn get_opcodes() -> Opcodes {
     let mut opcodes: Opcodes = HashMap::new();
 
     opcodes.insert(0x00, Box::new(opcodes::stop_and_arithmetic::stop));
     opcodes.insert(0x01, Box::new(opcodes::stop_and_arithmetic::add));
     opcodes.insert(0x02, Box::new(opcodes::stop_and_arithmetic::mul));
-    // opcodes.insert(0x03, Box::new(opcodes::stop_and_arithmetic::sub));
-    // opcodes.insert(0x04, Box::new(opcodes::stop_and_arithmetic::div));
+    opcodes.insert(0x03, Box::new(opcodes::stop_and_arithmetic::sub));
+    opcodes.insert(0x04, Box::new(opcodes::stop_and_arithmetic::div));
     // opcodes.insert(0x05, Box::new(opcodes::stop_and_arithmetic::sdiv));
-    // opcodes.insert(0x06, Box::new(opcodes::stop_and_arithmetic::r#mod));
+    opcodes.insert(0x06, Box::new(opcodes::stop_and_arithmetic::modd));
     // opcodes.insert(0x07, Box::new(opcodes::stop_and_arithmetic::smod));
-    // opcodes.insert(0x08, Box::new(opcodes::stop_and_arithmetic::addmod));
-    // opcodes.insert(0x09, Box::new(opcodes::stop_and_arithmetic::mulmod));
+    opcodes.insert(0x08, Box::new(opcodes::stop_and_arithmetic::addmod));
+    opcodes.insert(0x09, Box::new(opcodes::stop_and_arithmetic::mulmod));
     // opcodes.insert(0x0a, Box::new(opcodes::stop_and_arithmetic::exp));
     // opcodes.insert(0x0b, Box::new(opcodes::stop_and_arithmetic::signextend));
 
