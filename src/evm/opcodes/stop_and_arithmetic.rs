@@ -109,3 +109,13 @@ pub fn mulmod(_ctx: &mut ExecutionContext) -> OpcodeResult {
     _ctx.pc += 1;
     Ok(None)
 }
+pub fn exponent(_ctx: &mut ExecutionContext) -> OpcodeResult {
+    let a = _ctx.stack.pop().unwrap();
+    let b = _ctx.stack.pop().unwrap();
+
+    let (sum, _overflown) = a.overflowing_pow(b);
+
+    _ctx.stack.push(sum);
+    _ctx.pc += 1;
+    Ok(None)
+}

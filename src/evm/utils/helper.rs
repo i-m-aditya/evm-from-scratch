@@ -33,7 +33,7 @@ pub fn get_opcodes() -> Opcodes {
     // opcodes.insert(0x07, Box::new(opcodes::stop_and_arithmetic::smod));
     opcodes.insert(0x08, Box::new(opcodes::stop_and_arithmetic::addmod));
     opcodes.insert(0x09, Box::new(opcodes::stop_and_arithmetic::mulmod));
-    // opcodes.insert(0x0a, Box::new(opcodes::stop_and_arithmetic::exp));
+    opcodes.insert(0x0a, Box::new(opcodes::stop_and_arithmetic::exponent));
     // opcodes.insert(0x0b, Box::new(opcodes::stop_and_arithmetic::signextend));
 
     opcodes.insert(0x50, Box::new(opcodes::push::pop));
